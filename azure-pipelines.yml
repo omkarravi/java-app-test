@@ -27,7 +27,7 @@ stages:
             effectivePomSkip: false
             sonarQubeRunAnalysis: false
 
-        - publish: target/*.war
+        - publish: target/JavaLoginShowcase-1.0.0.war
           displayName: Publish WAR Artifact
           artifact: war
 
