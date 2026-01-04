@@ -66,16 +66,19 @@ stages:
           artifact: war
 
         - script: |
-            TOMCAT_WEBAPPS="/opt/tomcat/webapps"
+            TOMCAT_WEBAPPS="/var/lib/tomcat9/webapps"
 
             echo "Stopping Tomcat"
             sudo systemctl stop tomcat9
 
             echo "Cleaning old deployment..."
-            sudo rm -rf $TOMCAT_WEBAPPS/ROOT*
+            sudo rm -rf /var/lib/tomcat9/webapps/ROOT*
 
             echo "Deploying new WAR..."
-            sudo cp $(Pipeline.Workspace)/war/*.war $TOMCAT_WEBAPPS/ROOT.war
+            sudo cp $(Pipeline.Workspace)/war/*.war /var/lib/tomcat9/webapps/ROOT.war
+
+            echo "Setting permissions..."
+            sudo chown tomcat:tomcat /var/lib/tomcat9/webapps/ROOT.war
 
             echo "Starting Tomcat..."
             sudo systemctl start tomcat9
