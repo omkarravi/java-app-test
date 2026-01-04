@@ -53,29 +53,30 @@ stages:
             effectivePomSkip: false
             sonarQubeRunAnalysis: false
 
-       
 
   - stage: Deploy
     displayName: Deploy to TomCat Server
     dependsOn: Test
     condition: succeeded()
     jobs:
-      - job: deploy
-        displayName: deploy war
-        steps:
+    - job: deploy
+      displayName: Deploy WAR
+      steps:
         - download: current
           artifact: war
 
         - script: |
+            TOMCAT_WEBAPPS="/opt/tomcat/webapps"
+
             echo "Stopping Tomcat"
             sudo systemctl stop tomcat9
 
-            echo "Deploying WAR"
-            rm -rf $(tomcat_webapps)/ROOT*
-            cp $(Pipeline.Workspace)/war/*.war $(tomcat_webapps)/ROOT.war
+            echo "Cleaning old deployment..."
+            sudo rm -rf $TOMCAT_WEBAPPS/ROOT*
 
-            echo "Starting Tomcat"
+            echo "Deploying new WAR..."
+            sudo cp $(Pipeline.Workspace)/war/*.war $TOMCAT_WEBAPPS/ROOT.war
+
+            echo "Starting Tomcat..."
             sudo systemctl start tomcat9
           displayName: Tomcat Deploy
-        
-        
