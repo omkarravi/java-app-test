@@ -1,0 +1,29 @@
+trigger: 
+ branches:
+   include:
+     - main
+
+pool:
+  name: my-pool
+  demands:
+  - Agent.Name -equals infra-agent
+
+
+stages:
+  - stage: Build
+    displayName: Build Application
+    jobs:
+      - job: Build_job
+        displayName: Maven Build
+        steps:
+          - 
+- task: Maven@4
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'clean package'
+    publishJUnitResults: false
+    javaHomeOption: 'JDKVersion'
+    mavenVersionOption: 'Default'
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: false
