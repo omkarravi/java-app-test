@@ -27,6 +27,12 @@ stages:
             effectivePomSkip: false
             sonarQubeRunAnalysis: false
 
+        - publish: target/*.war
+          displayName: Publish WAR Artifact
+          artifact: war
+
+        
+
   - stage: Test
     displayName: Test & Publish Artifact
     dependsOn: Build
@@ -47,9 +53,7 @@ stages:
             effectivePomSkip: false
             sonarQubeRunAnalysis: false
 
-        - publish: target/*.war
-          displayName: Publish WAR Artifact
-          artifact: war
+       
 
   - stage: Deploy
     displayName: Deploy to TomCat Server
